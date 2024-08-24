@@ -3,7 +3,6 @@ from tkinter import messagebox
 import sqlite3
 import matplotlib.pyplot as plt
 
-# Database setup
 def setup_database():
     try:
         conn = sqlite3.connect('bmi_data.db')
@@ -114,7 +113,6 @@ def view_data(conn, c):
         c.execute("SELECT id, name, age, weight, height, bmi, category, timestamp FROM bmi_records")
         records = c.fetchall()
 
-        # Create a new window to display the data
         data_window = tk.Toplevel(app)
         data_window.title("BMI Records")
 
@@ -134,7 +132,6 @@ def view_feedback(conn, c):
         c.execute("SELECT id, name, feedback, timestamp FROM bmi_records WHERE feedback IS NOT NULL AND feedback != ''")
         feedbacks = c.fetchall()
 
-        # Create a new window to display the feedback
         feedback_window = tk.Toplevel(app)
         feedback_window.title("Customer Feedback")
 
@@ -146,7 +143,7 @@ def view_feedback(conn, c):
         for feedback in feedbacks:
             text.insert(tk.END, f"ID: {feedback[0]}, Name: {feedback[1]}, Timestamp: {feedback[3]}\n")
             text.insert(tk.END, f"Feedback: {feedback[2]}\n", 'bold_large')
-            text.insert(tk.END, '\n')  # Add a blank line for separation
+            text.insert(tk.END, '\n')  
         text.config(state=tk.DISABLED)
     except sqlite3.Error as e:
         messagebox.showerror("Database Error", f"Error retrieving feedback from database: {e}")
@@ -174,13 +171,11 @@ def plot_data(conn, c):
     except sqlite3.Error as e:
         messagebox.showerror("Database Error", f"Error retrieving data from database: {e}")
 
-# Main application setup
 conn, c = setup_database()
 
 app = tk.Tk()
 app.title("BMI Calculator")
 
-# Layout configuration
 labels = ["Name", "Age", "Weight", "Height", "Feedback"]
 for i, label in enumerate(labels):
     tk.Label(app, text=label).grid(row=i, column=0, padx=10, pady=5)
@@ -195,7 +190,6 @@ entries = [name_entry, age_entry, weight_entry, height_entry, feedback_entry]
 for i, entry in enumerate(entries):
     entry.grid(row=i, column=1, padx=10, pady=5)
 
-# Weight and height unit selection
 weight_unit_var = tk.StringVar(value="kg")
 height_unit_var = tk.StringVar(value="meters")
 
@@ -225,7 +219,6 @@ feedback_button.grid(row=8, columnspan=3, pady=10)
 
 app.mainloop()
 
-# Close the database connection
 if conn:
     try:
         conn.close()
