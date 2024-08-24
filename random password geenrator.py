@@ -24,28 +24,22 @@ def generate_password():
         if use_numbers:
             character_set += numbers
 
-        # If special characters are selected, add them to the set
         if use_symbols:
             character_set += symbols
 
-        # Exclude specific characters
         character_set = ''.join(c for c in character_set if c not in exclude_chars)
 
         if not character_set:
             raise ValueError("At least one character type must be selected and should have remaining characters after exclusion.")
 
-        # Ensure the first and last characters are not symbols
         first_last_set = ''.join(c for c in (letters + numbers) if c not in exclude_chars) if (use_letters or use_numbers) else character_set
 
-        # Generate the middle part of the password
         middle_length = length - 2 if length > 2 else 0
         middle_password = ''.join(random.choice(character_set) for _ in range(middle_length))
         
-        # Generate the first and last characters
         first_char = random.choice(first_last_set)
         last_char = random.choice(first_last_set)
         
-        # Combine them into the final password
         password = first_char + middle_password + last_char
         password_entry.delete(0, tk.END)
         password_entry.insert(0, password)
